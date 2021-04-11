@@ -35,6 +35,9 @@ public class StudentManager extends javax.swing.JFrame {
     public StudentManager() {
         initComponents();
         setLocationRelativeTo(null);
+        
+        LoadList();
+        
         LoadData();
         tblList.getColumnModel().getColumn(0).setPreferredWidth(10);
         tblList.getColumnModel().getColumn(1).setPreferredWidth(80);
@@ -75,8 +78,7 @@ public class StudentManager extends javax.swing.JFrame {
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
 
-            String sql = "select studentresult.studentid as ID, ListStudent.fullname as name, java, javascript, htmlcss, average FROM StudentResult\n"
-                    + "INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid";
+            String sql = "SELECT StudentResult.studentid AS ID, ListStudent.fullname AS name, java, javascript, htmlcss, average FROM StudentResult INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid order by AVERAGE DESC LIMIT 3";
             // Tạo đối tượng thực thi câu lệnh Select
             java.sql.Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -98,7 +100,7 @@ public class StudentManager extends javax.swing.JFrame {
                 tblModel.addRow(data);
 
                 tblList.setModel(tblModel);
-
+                
                 Result list = new Result();
 
                 list.setStuid(rs.getString("ID"));
@@ -109,6 +111,7 @@ public class StudentManager extends javax.swing.JFrame {
                 list.setAverage(rs.getDouble("average"));
 
                 listrs.add(list);
+                
             }
             conn.close();
             st.close();
@@ -118,7 +121,48 @@ public class StudentManager extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fillTable();
+        fillTable();       
+    }
+    
+    List<Result> search = new ArrayList<>();
+    void LoadList() {
+        listrs.clear();
+        System.out.println("----------------------");
+        Connection conn = null;
+        try {
+            String dbURL = "jdbc:mysql://localhost:3306/Account";
+            String username = "root";
+            String password = "Hai14031993";
+            conn = DriverManager.getConnection(dbURL, username, password);
+
+            String sql = "SELECT StudentResult.studentid AS ID, ListStudent.fullname AS name, java, javascript, htmlcss, average FROM StudentResult INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid";
+            // Tạo đối tượng thực thi câu lệnh Select
+            java.sql.Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+
+            // Thực thi
+            // Nếu sách không tồn tại
+            while (rs.next()) {               
+                Result list2 = new Result();
+
+                list2.setStuid(rs.getString("ID"));
+                list2.setFullname(rs.getString("name"));
+                list2.setJava(rs.getDouble("java"));
+                list2.setJavascript(rs.getDouble("javascript"));
+                list2.setHtmlcss(rs.getDouble("htmlcss"));
+                list2.setAverage(rs.getDouble("average"));
+
+                search.add(list2);
+            }
+            conn.close();
+            st.close();
+            rs.close();
+            System.out.println(listrs.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void AddResult() {
@@ -219,11 +263,11 @@ public class StudentManager extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please enter Student ID!");
         }
         boolean con = false;
-        for (Result student : listrs) {
+        for (Result student : search) {
             if (stuid.equals(student.getStuid())) {
                 JOptionPane.showMessageDialog(this, "<html><font color=purple>Student ID: " + student.getStuid() + "\n<html><font color=green>Fullname: " + student.getFullname()
                         + "\n<html><font color=red>Java: " + student.getJava() + "\n<html><font color=blue>JavaScript: " + student.getJavascript()
-                        + "\n<html><font color=orange>HTML/CSS: " + student.getHtmlcss() + "\n<html><font color=aqua>Average: " + student.getAverage(), "Information", HEIGHT, new ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/search.png"));
+                        + "\n<html><font color=orange>HTML/CSS: " + student.getHtmlcss() + "\n<html><font color=aqua>Average: " + String.format("%.2f", student.getAverage()), "Information", HEIGHT, new ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/search.png"));
                 con = true;
                 break;
             }
@@ -343,7 +387,7 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel2.setText("Student ID");
 
         btnSearch.setBackground(new java.awt.Color(0, 255, 204));
-        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/search.png"))); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\search.png")); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -384,7 +428,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setLayout(null);
 
-        btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/new.png"))); // NOI18N
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\new.png")); // NOI18N
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
@@ -393,7 +437,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnNew);
         btnNew.setBounds(20, 30, 70, 40);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/add.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -402,7 +446,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnSave);
         btnSave.setBounds(20, 80, 70, 40);
 
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/delete.png"))); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -411,7 +455,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnDelete);
         btnDelete.setBounds(20, 130, 70, 40);
 
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/edit.png"))); // NOI18N
+        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\edit.png")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -456,13 +500,13 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 153, 153));
         jLabel9.setText("Average");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/first.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\first.png")); // NOI18N
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/next.png"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\next.png")); // NOI18N
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/previous.png"))); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\previous.png")); // NOI18N
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/last.png"))); // NOI18N
+        jButton7.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\last.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -600,7 +644,7 @@ public class StudentManager extends javax.swing.JFrame {
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, -1, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assignment/bg.png"))); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\bg.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -636,6 +680,10 @@ public class StudentManager extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
+        for (Result student : search) {
+            System.out.println(student.getStuid() + " " + student.getFullname());
+            System.out.println("------------------");
+        }
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void tblListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListMouseClicked
