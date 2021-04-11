@@ -304,7 +304,7 @@
         <Component class="javax.swing.JButton" name="btnUpload">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/up.png"/>
+              <Image iconType="2" name="C:\Users\Admin\Desktop\SOF203\src\main\java\Assignment\up.png"/>
             </Property>
           </Properties>
           <Events>
@@ -319,7 +319,7 @@
         <Component class="javax.swing.JButton" name="btnRemove">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/remove.png"/>
+              <Image iconType="2" name="C:\Users\Admin\Desktop\SOF203\src\main\java\Assignment\remove.png"/>
             </Property>
           </Properties>
           <Events>
@@ -351,10 +351,23 @@
             </Constraint>
           </Constraints>
         </Component>
+        <Component class="javax.swing.JButton" name="btnTakePic">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Take Pic"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTakePicActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="443" y="320" width="100" height="40"/>
+            </Constraint>
+          </Constraints>
+        </Component>
         <Component class="javax.swing.JLabel" name="Background">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/registration.png"/>
+              <Image iconType="2" name="C:\Users\Admin\Desktop\SOF203\src\main\java\Assignment\registration.png"/>
             </Property>
           </Properties>
           <Constraints>

@@ -5,15 +5,25 @@
  */
 package Assignment;
 
+import static Assignment.AdminManager.take;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -215,6 +225,54 @@ public class Registration extends javax.swing.JFrame {
         txtEmail.setText("");
         lblImg.setIcon(null);
     }
+    
+    boolean pic = false;
+    void TakePic() {
+        pic = false;
+        com.github.sarxos.webcam.Webcam webcam = com.github.sarxos.webcam.Webcam.getDefault();
+        JFrame frame = new JFrame("Webcam");
+        frame.setPreferredSize(new Dimension(600, 480));
+        frame.setLocationRelativeTo(this);
+        if (txtID.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Please enter Student ID before taking picture!");
+            txtID.requestFocus();
+        } else {
+
+            WebcamPanel panel = new WebcamPanel(webcam);
+            webcam.setViewSize(WebcamResolution.VGA.getSize());
+            panel.setMirrored(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JButton btn1 = new JButton("Take Pics");
+            btn1.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        BufferedImage image = webcam.getImage();
+                        ImageIO.write(image, "PNG", new File("C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\" + txtID.getText() + ".png"));
+                        take = true;
+                        System.out.println(take);
+                        lblImg.setIcon(new ImageIcon(((new ImageIcon("C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\" + txtID.getText() + ".png").getImage()).
+                                getScaledInstance(lblImg.getWidth(), lblImg.getHeight(), java.awt.Image.SCALE_SMOOTH))));
+                        frame.dispose();
+                        webcam.close();
+                        IU = "C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\" + txtID.getText() + ".png";
+                    } catch (Exception err) {
+
+                    }
+
+                }
+            });
+
+            pic = true;
+
+            panel.add(btn1);
+
+            frame.add(panel);
+
+            frame.setResizable(false);
+            frame.pack();
+            frame.setVisible(true);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -249,6 +307,7 @@ public class Registration extends javax.swing.JFrame {
         btnUpload = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         lblImg = new javax.swing.JLabel();
+        btnTakePic = new javax.swing.JButton();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -341,7 +400,7 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 210, 30));
 
-        btnUpload.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/up.png")); // NOI18N
+        btnUpload.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\up.png")); // NOI18N
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadActionPerformed(evt);
@@ -349,7 +408,7 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(btnUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 280, 70, -1));
 
-        btnRemove.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/remove.png")); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\remove.png")); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -362,7 +421,15 @@ public class Registration extends javax.swing.JFrame {
         lblImg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 140, 170));
 
-        Background.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/registration.png")); // NOI18N
+        btnTakePic.setText("Take Pic");
+        btnTakePic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTakePicActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 320, 100, 40));
+
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\registration.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 609, 569));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -412,6 +479,11 @@ public class Registration extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
 
+    private void btnTakePicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakePicActionPerformed
+        // TODO add your handling code here:
+        TakePic();
+    }//GEN-LAST:event_btnTakePicActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -453,6 +525,7 @@ public class Registration extends javax.swing.JFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSignIn;
     private javax.swing.JButton btnSignUp;
+    private javax.swing.JButton btnTakePic;
     private javax.swing.JButton btnUpload;
     private javax.swing.JComboBox<String> cboJob;
     private javax.swing.JLabel jLabel1;

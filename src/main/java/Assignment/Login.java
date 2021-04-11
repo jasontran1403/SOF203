@@ -154,7 +154,7 @@ public class Login extends javax.swing.JFrame {
         jButton3.setText("Login By QR Code");
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\src\\main\\resources\\login.png")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\login.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

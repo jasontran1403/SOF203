@@ -279,7 +279,7 @@
         <Component class="javax.swing.JButton" name="btnNew">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\new.png"/>
+              <Image iconType="3" name="/Assignment/new.png"/>
             </Property>
           </Properties>
           <Events>
@@ -294,7 +294,7 @@
         <Component class="javax.swing.JButton" name="btnSave">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\add.png"/>
+              <Image iconType="3" name="/Assignment/add.png"/>
             </Property>
           </Properties>
           <Events>
@@ -309,7 +309,7 @@
         <Component class="javax.swing.JButton" name="btnDelete">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\delete.png"/>
+              <Image iconType="3" name="/Assignment/delete.png"/>
             </Property>
           </Properties>
           <Events>
@@ -324,7 +324,7 @@
         <Component class="javax.swing.JButton" name="btnUpdate">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\edit.png"/>
+              <Image iconType="3" name="/Assignment/edit.png"/>
             </Property>
           </Properties>
           <Events>
@@ -365,7 +365,7 @@
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\up.png"/>
+              <Image iconType="3" name="/Assignment/up.png"/>
             </Property>
           </Properties>
           <Events>
@@ -380,7 +380,7 @@
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\remove.png"/>
+              <Image iconType="3" name="/Assignment/remove.png"/>
             </Property>
           </Properties>
           <Events>
@@ -421,7 +421,7 @@
         <Component class="javax.swing.JLabel" name="Background">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\multiple-choice-question\SOF203\src\main\resources\bg2.png"/>
+              <Image iconType="3" name="/Assignment/bg2.png"/>
             </Property>
           </Properties>
           <Constraints>
