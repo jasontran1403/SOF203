@@ -387,7 +387,6 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel2.setText("Student ID");
 
         btnSearch.setBackground(new java.awt.Color(0, 255, 204));
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\search.png")); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -428,7 +427,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setLayout(null);
 
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\new.png")); // NOI18N
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
@@ -437,7 +435,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnNew);
         btnNew.setBounds(20, 30, 70, 40);
 
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -446,7 +443,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnSave);
         btnSave.setBounds(20, 80, 70, 40);
 
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -455,7 +451,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnDelete);
         btnDelete.setBounds(20, 130, 70, 40);
 
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\edit.png")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -499,14 +494,6 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 153, 153));
         jLabel9.setText("Average");
-
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\first.png")); // NOI18N
-
-        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\next.png")); // NOI18N
-
-        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\previous.png")); // NOI18N
-
-        jButton7.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\last.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -644,7 +631,7 @@ public class StudentManager extends javax.swing.JFrame {
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, -1, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\bg.png")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\bg.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -400,7 +400,6 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 210, 30));
 
-        btnUpload.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\up.png")); // NOI18N
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadActionPerformed(evt);
@@ -408,7 +407,6 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(btnUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 280, 70, -1));
 
-        btnRemove.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\remove.png")); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -429,7 +427,7 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 320, 100, 40));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Admin\\Desktop\\SOF203\\src\\main\\java\\Assignment\\registration.png")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\registration.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 609, 569));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

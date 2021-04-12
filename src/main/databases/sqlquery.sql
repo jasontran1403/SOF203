@@ -62,6 +62,8 @@ CREATE PROCEDURE SP_SHOW ()
 delimiter ;
 
 
+
+
 SELECT * FROM ListAccount;
 SELECT * FROM ListStudent;
 SELECT * FROM StudentResult;

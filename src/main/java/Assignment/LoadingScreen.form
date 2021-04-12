@@ -76,7 +76,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Admin\Desktop\SOF203\src\main\java\Assignment\loading.gif"/>
+              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\loading.gif"/>
             </Property>
           </Properties>
         </Component>
