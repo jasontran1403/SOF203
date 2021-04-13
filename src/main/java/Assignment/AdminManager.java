@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -170,8 +171,11 @@ public class AdminManager extends javax.swing.JFrame {
             rdoFemale.setSelected(true);
         }
         txaAdd.setText(model.getValueAt(j, 5).toString());
+        System.out.println(liststu.get(j).getImagepath().length());
+
         lblImg.setIcon(new ImageIcon(((new ImageIcon(liststu.get(j).getImagepath()).getImage()).
                 getScaledInstance(lblImg.getWidth(), lblImg.getHeight(), java.awt.Image.SCALE_SMOOTH))));
+
     }
 
     void New() {
@@ -182,6 +186,7 @@ public class AdminManager extends javax.swing.JFrame {
         rdoMale.setSelected(true);
         txaAdd.setText("");
         lblImg.setIcon(null);
+        Remove();
     }
 
     void AddStudent() {
@@ -231,16 +236,17 @@ public class AdminManager extends javax.swing.JFrame {
                 ps.setString(4, phone);
                 ps.setString(5, sex);
                 ps.setString(6, add);
+                System.out.println(IU);
                 ps.setString(7, IU);
+
                 System.out.println("Thêm thành công");
 
                 int row = ps.executeUpdate();
 
-                New();
                 if (row != 0) {
                     LoadData();
                     fillTable();
-                    IU = null;
+
                 } else {
                     return;
                 }
@@ -290,8 +296,8 @@ public class AdminManager extends javax.swing.JFrame {
 
     public static boolean take = false;
 
+    String picker = "";
     void GetPath() {
-        String picker = "";
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -318,31 +324,23 @@ public class AdminManager extends javax.swing.JFrame {
             btn1.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        BufferedImage image = webcam.getImage();
-                        String picker = "";
-                        JFileChooser fc = new JFileChooser();
-                        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                            picker = String.valueOf(fc.getSelectedFile()) + "\\" + txtStudentID.getText() + ".png";
-                        }
-                        ImageIO.write(image, "PNG", new File("picker"));
-                        take = true;
-                        System.out.println(take);
-                        lblImg.setIcon(new ImageIcon(((new ImageIcon("picker").getImage()).
+                        BufferedImage image = webcam.getImage();                     
+                        GetPath();
+                        IU = picker;
+                        System.out.println(IU + " -- " + picker);
+                        ImageIO.write(image, "PNG", new File(IU));
+                        lblImg.setIcon(new ImageIcon(((new ImageIcon(IU).getImage()).
                                 getScaledInstance(lblImg.getWidth(), lblImg.getHeight(), java.awt.Image.SCALE_SMOOTH))));
+
+//                        IU = picker;
                         frame.dispose();
                         webcam.close();
-                        IU = picker;
-                        System.out.println(IU);
-                        System.out.println(picker);
                     } catch (Exception err) {
 
                     }
 
                 }
             });
-
-            pic = true;
 
             panel.add(btn1);
 
@@ -625,7 +623,8 @@ public class AdminManager extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
-        New();
+        //New();
+        lblImg.setText("Test");
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

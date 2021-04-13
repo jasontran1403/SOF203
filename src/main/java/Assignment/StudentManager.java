@@ -26,6 +26,7 @@ public class StudentManager extends javax.swing.JFrame {
 
     List<Student> liststu = new ArrayList<>();
     List<Result> listrs = new ArrayList<>();
+    List<Result> search = new ArrayList<>();
     private String header[] = {"Student ID", "Fullname", "Java", "JavaScript", "HTML/CSS", "AVERAGE"};
     private DefaultTableModel tblModel = new DefaultTableModel(header, 0);
 
@@ -35,9 +36,7 @@ public class StudentManager extends javax.swing.JFrame {
     public StudentManager() {
         initComponents();
         setLocationRelativeTo(null);
-        
         LoadList();
-        
         LoadData();
         tblList.getColumnModel().getColumn(0).setPreferredWidth(10);
         tblList.getColumnModel().getColumn(1).setPreferredWidth(80);
@@ -65,7 +64,7 @@ public class StudentManager extends javax.swing.JFrame {
         txtJavaScript.setText(model1.getValueAt(j, 3).toString());
         txtHTMLCSS.setText(model1.getValueAt(j, 4).toString());
 
-        lblAverage.setText(String.format("%.2f", model1.getValueAt(j, 4)));
+        lblAverage.setText(String.format("%.2f", listrs.get(j).getAverage()));
     }
 
     public void LoadData() {
@@ -100,7 +99,7 @@ public class StudentManager extends javax.swing.JFrame {
                 tblModel.addRow(data);
 
                 tblList.setModel(tblModel);
-                
+
                 Result list = new Result();
 
                 list.setStuid(rs.getString("ID"));
@@ -111,7 +110,7 @@ public class StudentManager extends javax.swing.JFrame {
                 list.setAverage(rs.getDouble("average"));
 
                 listrs.add(list);
-                
+
             }
             conn.close();
             st.close();
@@ -121,10 +120,9 @@ public class StudentManager extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fillTable();       
+        fillTable();
     }
-    
-    List<Result> search = new ArrayList<>();
+
     void LoadList() {
         listrs.clear();
         System.out.println("----------------------");
@@ -140,10 +138,9 @@ public class StudentManager extends javax.swing.JFrame {
             java.sql.Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
-
             // Thực thi
             // Nếu sách không tồn tại
-            while (rs.next()) {               
+            while (rs.next()) {
                 Result list2 = new Result();
 
                 list2.setStuid(rs.getString("ID"));
@@ -267,7 +264,7 @@ public class StudentManager extends javax.swing.JFrame {
             if (stuid.equals(student.getStuid())) {
                 JOptionPane.showMessageDialog(this, "<html><font color=purple>Student ID: " + student.getStuid() + "\n<html><font color=green>Fullname: " + student.getFullname()
                         + "\n<html><font color=red>Java: " + student.getJava() + "\n<html><font color=blue>JavaScript: " + student.getJavascript()
-                        + "\n<html><font color=orange>HTML/CSS: " + student.getHtmlcss() + "\n<html><font color=aqua>Average: " + String.format("%.2f", student.getAverage()), "Information", HEIGHT, new ImageIcon("/Users/jason/Desktop/multiple-choice-question/SOF203/src/main/resources/search.png"));
+                        + "\n<html><font color=orange>HTML/CSS: " + student.getHtmlcss() + "\n<html><font color=aqua>Average: " + String.format("%.2f", student.getAverage()), "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 con = true;
                 break;
             }
@@ -324,6 +321,85 @@ public class StudentManager extends javax.swing.JFrame {
             // Thực thi
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    int i = 0;
+
+    void First() {
+        txtStudentID.setText(search.get(0).getStuid());
+        txtFullname.setText(search.get(0).getFullname());
+        txtJava.setText(String.valueOf(search.get(0).getJava()));
+        txtJavaScript.setText(String.valueOf(search.get(0).getJavascript()));
+        txtHTMLCSS.setText(String.valueOf((search.get(0).getHtmlcss())));
+        lblAverage.setText(String.format("%.2f", search.get(0).getAverage()));
+    }
+
+    void Last() {
+        txtStudentID.setText(search.get(search.size() - 1).getStuid());
+        txtFullname.setText(search.get(search.size() - 1).getFullname());
+        txtJava.setText(String.valueOf(search.get(search.size() - 1).getJava()));
+        txtJavaScript.setText(String.valueOf(search.get(search.size() - 1).getJavascript()));
+        txtHTMLCSS.setText(String.valueOf((search.get(search.size() - 1).getHtmlcss())));
+        lblAverage.setText(String.format("%.2f", search.get(search.size() - 1).getAverage()));
+    }
+
+    void Next() {
+        if (txtStudentID.getText().isEmpty()) {
+            txtStudentID.setText(search.get(0).getStuid());
+            txtFullname.setText(search.get(0).getFullname());
+            txtJava.setText(String.valueOf((search.get(0).getJava())));
+            txtJavaScript.setText(String.valueOf((search.get(0).getJavascript())));
+            txtHTMLCSS.setText(String.valueOf((search.get(0).getHtmlcss())));
+            lblAverage.setText(String.format("%.2f", (search.get(0).getAverage())));
+        } else {
+            int j = 0;
+            for (int k = 0; k < search.size(); k++) {
+                if (txtStudentID.getText().equalsIgnoreCase(search.get(k).getStuid())) {
+                    j = k + 1;
+                    break;
+                }
+
+            }
+            if (j > search.size() - 1) {
+
+                j = 0;
+            }
+            txtStudentID.setText(search.get(j).getStuid());
+            txtFullname.setText(search.get(j).getFullname());
+            txtJava.setText(String.valueOf((search.get(j).getJava())));
+            txtJavaScript.setText(String.valueOf((search.get(j).getJavascript())));
+            txtHTMLCSS.setText(String.valueOf((search.get(j).getHtmlcss())));
+            lblAverage.setText(String.format("%.2f", (search.get(j).getAverage())));
+        }
+    }
+
+    void Prev() {
+        if (txtStudentID.getText().isEmpty()) {
+            txtStudentID.setText(search.get(search.size()-1).getStuid());
+            txtFullname.setText(search.get(search.size()-1).getFullname());
+            txtJava.setText(String.valueOf((search.get(search.size()-1).getJava())));
+            txtJavaScript.setText(String.valueOf((search.get(search.size()-1).getJavascript())));
+            txtHTMLCSS.setText(String.valueOf((search.get(search.size()-1).getHtmlcss())));
+            lblAverage.setText(String.format("%.2f", search.get(search.size()-1).getAverage()));
+        } else {
+            int j = 0;
+            for (int k = 0; k < search.size(); k++) {
+                if (txtStudentID.getText().equalsIgnoreCase(search.get(k).getStuid())) {
+                    j = k - 1;
+                    break;
+                }
+
+            }
+            if (txtStudentID.getText().equalsIgnoreCase(search.get(0).getStuid())) {
+                j = search.size() - 1;
+            }
+            txtStudentID.setText(search.get(j).getStuid());
+            txtFullname.setText(search.get(j).getFullname());
+            txtJava.setText(String.valueOf((search.get(j).getJava())));
+            txtJavaScript.setText(String.valueOf(search.get(j).getJavascript()));
+            txtHTMLCSS.setText(String.valueOf((search.get(j).getHtmlcss())));
+            lblAverage.setText(String.format("%.2f", search.get(j).getAverage()));
         }
     }
 
@@ -387,6 +463,7 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel2.setText("Student ID");
 
         btnSearch.setBackground(new java.awt.Color(0, 255, 204));
+        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\search.png")); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -427,6 +504,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setLayout(null);
 
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\new.png")); // NOI18N
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
@@ -435,6 +513,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnNew);
         btnNew.setBounds(20, 30, 70, 40);
 
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -443,6 +522,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnSave);
         btnSave.setBounds(20, 80, 70, 40);
 
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -451,6 +531,7 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnDelete);
         btnDelete.setBounds(20, 130, 70, 40);
 
+        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\edit.png")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -469,6 +550,7 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel3.setText("Fullname");
 
         txtFullname.setBackground(new java.awt.Color(255, 204, 204));
+        txtFullname.setEnabled(false);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 153, 153));
@@ -494,6 +576,34 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 153, 153));
         jLabel9.setText("Average");
+
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\first.png")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\next.png")); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\previous.png")); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\last.png")); // NOI18N
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -687,6 +797,26 @@ public class StudentManager extends javax.swing.JFrame {
         // TODO add your handling code here:
         Update();
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        First();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        Next();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        Prev();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        Last();
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
