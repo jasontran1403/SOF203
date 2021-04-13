@@ -277,11 +277,6 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JButton" name="btnNew">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\new.png"/>
-            </Property>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewActionPerformed"/>
           </Events>
@@ -292,11 +287,6 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JButton" name="btnSave">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\add.png"/>
-            </Property>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
           </Events>
@@ -307,11 +297,6 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JButton" name="btnDelete">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\delete.png"/>
-            </Property>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteActionPerformed"/>
           </Events>
@@ -322,11 +307,6 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JButton" name="btnUpdate">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\edit.png"/>
-            </Property>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
           </Events>
@@ -365,7 +345,7 @@
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\up.png"/>
+              <Image iconType="2" name="/Users/jason/Desktop/SOF203/src/main/java/Assignment/up.png"/>
             </Property>
           </Properties>
           <Events>
@@ -380,7 +360,7 @@
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\remove.png"/>
+              <Image iconType="2" name="/Users/jason/Desktop/SOF203/src/main/java/Assignment/remove.png"/>
             </Property>
           </Properties>
           <Events>
@@ -421,7 +401,7 @@
         <Component class="javax.swing.JLabel" name="Background">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jason\Desktop\SOF203\src\main\java\Assignment\bg2.png"/>
+              <Image iconType="2" name="/Users/jason/Desktop/SOF203/src/main/java/Assignment/bg2.png"/>
             </Property>
           </Properties>
           <Constraints>

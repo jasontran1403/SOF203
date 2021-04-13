@@ -22,51 +22,58 @@ import java.util.List;
 public class TCPServerTong {
 
     public static void main(String[] args) throws IOException {
-//        String s;
-//        String capitalizedSentence;
-//        ServerSocket welcomeSocket = new ServerSocket(6789);
-//        while(true) {
-//            Socket connectionSocket = welcomeSocket.accept();
-//            BufferedReader inFromClient = new BufferedReader(
-//                    new InputStreamReader(connectionSocket.getInputStream()));
-//            DataOutputStream outToClient = new DataOutputStream(
-//                    connectionSocket.getOutputStream());
-//            s = inFromClient.readLine();
-//            double t = 0;
-            
-//            for(int i=0;i<s.length();i++){
-//                char x1 = s.charAt(0);
-//                char x2 = s.charAt(1);
-//                char x3 = s.charAt(2);
-//                String n1 = String.valueOf(x1);
-//                String n2 = String.valueOf(x2);
-//                String n3 = String.valueOf(x3);
-//                if (n2.equals("+")) {
-//                    t = Double.parseDouble(n1) + Double.parseDouble(n3); 
-//                }
-//                if (n2.equals("-")) {
-//                    t = Double.parseDouble(n1) - Double.parseDouble(n3); 
-//                }
-//                if (n2.equals("*")) {
-//                    t = Double.parseDouble(n1) * Double.parseDouble(n3); 
-//                }
-//                if (n2.equals("/")) {
-//                    t = Double.parseDouble(n1) / Double.parseDouble(n3); 
-//                }
-//            } 
-            String s = "2323+12312";
+        String s;
+        ServerSocket welcomeSocket = new ServerSocket(6789);
+        while (true) {
+            Socket connectionSocket = welcomeSocket.accept();
+            BufferedReader inFromClient = new BufferedReader(
+                    new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(
+                    connectionSocket.getOutputStream());
+            s = inFromClient.readLine();
+            double t = 0;
+
+            String operator = "";
             int index = 0;
-            for(int i=0;i<s.length();i++){
+            StringBuilder sb1 = new StringBuilder();
+            StringBuilder sb2 = new StringBuilder();
+            for (int i = 0; i < s.length(); i++) {
                 char x = s.charAt(i);
                 String n = String.valueOf(x);
+
                 if (n.equals("+") || n.equals("-") || n.equals("*") || n.equals("/")) {
+                    operator = String.valueOf(x);
                     index = i;
                 }
             }
-            System.out.println(index);
+            for (int i = 0; i < index; i++) {
+                char x = s.charAt(i);
+                String num1 = String.valueOf(x);
+                sb1.append(num1);
+            }
+            for (int i = index + 1; i < s.length(); i++) {
+                char x = s.charAt(i);
+                String num2 = String.valueOf(x);
+                sb2.append(num2);
+            }
+            System.out.println(sb1);
+            System.out.println(sb2);
+            System.out.println(operator);
+            if (operator.equals("+")) {
+                t = Double.parseDouble(String.valueOf(sb1)) + Double.parseDouble(String.valueOf(sb2));
+            }
+            if (operator.equals("-")) {
+                t = Double.parseDouble(String.valueOf(sb1)) - Double.parseDouble(String.valueOf(sb2));
+            }
+            if (operator.equals("*")) {
+                t = Double.parseDouble(String.valueOf(sb1)) * Double.parseDouble(String.valueOf(sb2));
+            }
+            if (operator.equals("/")) {
+                t = Double.parseDouble(String.valueOf(sb1)) / Double.parseDouble(String.valueOf(sb2));
+            }
 
-//            outToClient.writeDouble(t);
-//            outToClient.flush();
-        
+            outToClient.writeDouble(t);
+            outToClient.flush();
+        }
     }
 }
