@@ -3,42 +3,56 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+class Multi extends Thread {
 
-/**
- *
- * @author jason
- */
-public class Server {
-    static Vector<ClientHandler> AllClients = new Vector<ClientHandler>();
-    public static void main(String args[]) throws Exception {
+    private Socket s = null;
+    DataInputStream infromClient;
 
-        try {
-            ServerSocket ss = new ServerSocket(1111);
-            System.out.println("Server Started");
-            while(true) {
-                Socket s = ss.accept();
-                DataInputStream dis = new DataInputStream(s.getInputStream());
-                String clientname = dis.readUTF();
-                System.out.println("Connected With : "+clientname);
-                ClientHandler client = new ClientHandler(s,clientname);
-                Thread t = new Thread(client);
-                AllClients.add(client);
-                t.start();
-                System.out.println("Ready to accept connections...");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    Multi() throws IOException {
 
     }
 
+    Multi(Socket s) throws IOException {
+        this.s = s;
+        infromClient = new DataInputStream(s.getInputStream());
+    }
 
+    public void run() {
+
+        String SQL = new String();
+        try {
+            SQL = infromClient.readUTF();
+        } catch (IOException ex) {
+            Logger.getLogger(Multi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Query: " + SQL);
+        try {
+            System.out.println("Socket Closing");
+            s.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Multi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+}
+
+public class Server {
+
+    public static void main(String args[]) throws IOException,
+            InterruptedException {
+
+        while (true) {
+            ServerSocket ss = new ServerSocket(11111);
+            System.out.println("Server is Awaiting");
+            Socket s = ss.accept();
+            Multi t = new Multi(s);
+            t.start();
+
+            Thread.sleep(2000);
+            ss.close();
+        }
+
+    }
 }
