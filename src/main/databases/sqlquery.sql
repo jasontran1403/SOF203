@@ -69,7 +69,8 @@ SELECT * FROM ListStudent;
 SELECT * FROM StudentResult;
 DELETE FROM ListStudent WHERE studentid = '3';
 CALL SP_DELETE('');
-
+INSERT INTO ListAccount VALUES ('Hai', '1234', null);
+INSERT INTO ListAccount VALUES ('Jason', '1234', null);
 DROP TABLE ListAccount;
 DROP TABLE StudentResult;
 DROP TABLE ListStudent;

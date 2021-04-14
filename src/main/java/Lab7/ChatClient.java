@@ -1,3 +1,4 @@
+package Lab7;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +14,10 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
- 
 public class ChatClient {
 
-     
     static class ChatAccess extends Observable {
-
+        
         private Socket socket;
         private OutputStream outputStream;
 
@@ -28,7 +27,6 @@ public class ChatClient {
             super.notifyObservers(arg);
         }
 
-         
         public void InitSocket(String server, int port) throws IOException {
             socket = new Socket(server, port);
             outputStream = socket.getOutputStream();
@@ -51,9 +49,8 @@ public class ChatClient {
             receivingThread.start();
         }
 
-        private static final String CRLF = "\r\n";  
+        private static final String CRLF = "\r\n";
 
-         
         public void send(String text) {
             try {
                 outputStream.write((text + CRLF).getBytes());
@@ -63,7 +60,6 @@ public class ChatClient {
             }
         }
 
-         
         public void close() {
             try {
                 socket.close();
@@ -73,11 +69,12 @@ public class ChatClient {
         }
     }
 
-     
     static class ChatFrame extends JFrame implements Observer {
 
         private JTextArea textArea;
         private JTextField inputTextField;
+        private JLabel avt1;
+        private JLabel avt2;
         private JButton sendButton;
         private ChatAccess chatAccess;
 
@@ -87,21 +84,30 @@ public class ChatClient {
             buildGUI();
         }
 
-         
+
         private void buildGUI() {
             textArea = new JTextArea(20, 50);
             textArea.setEditable(false);
             textArea.setLineWrap(true);
-            add(new JScrollPane(textArea), BorderLayout.CENTER);
-
+           add(new JScrollPane(textArea), BorderLayout.CENTER);
+            avt1 = new JLabel();
+            avt1.setIcon(new ImageIcon(((new ImageIcon("/Users/jason/Desktop/SOF203/PS14692.png").getImage()).
+                                getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH))));
+            avt2 = new JLabel();
+            avt2.setText("Welcome back, ");
+            avt2.setSize(100, 100);
+            add(new JScrollPane(avt1), BorderLayout.EAST);
+            add(new JScrollPane(avt2), BorderLayout.NORTH);
             Box box = Box.createHorizontalBox();
             add(box, BorderLayout.SOUTH);
             inputTextField = new JTextField();
             sendButton = new JButton("Send");
+            
             box.add(inputTextField);
             box.add(sendButton);
 
-             
+            
+
             ActionListener sendListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String str = inputTextField.getText();
@@ -124,7 +130,6 @@ public class ChatClient {
             });
         }
 
-         
         public void update(Observable o, Object arg) {
             final Object finalArg = arg;
             SwingUtilities.invokeLater(new Runnable() {
@@ -142,7 +147,7 @@ public class ChatClient {
         ChatAccess access = new ChatAccess();
 
         JFrame frame = new ChatFrame(access);
-        frame.setTitle("Chat hehe");
+        frame.setTitle("Chat");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
