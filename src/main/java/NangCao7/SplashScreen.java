@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Lab7;
+package NangCao7;
 
+import NangCao7.ChatRoom;
 import java.awt.event.ActionListener;
 import javax.swing.JProgressBar;
 import javax.swing.JWindow;
@@ -50,14 +51,15 @@ public class SplashScreen extends JWindow {
     }
 
     private void startProgressBar() {
-        progressBarTimer = new Timer(1000, al);
+        progressBarTimer = new Timer(10, al);
         progressBarTimer.start();
 
     }
 
     private void createAndShowFrame() {
-        String[] arguments = new String[]{"192.168.1.64"};
-        new ChatClient().main(arguments);
+        String IPServer = "localhost";
+        String[] arguments = new String[]{IPServer};
+        new ChatRoom().main(arguments);
         count = 0;
     }
 

@@ -16,8 +16,8 @@ public class Demo1 {
     public static void main(String[] args) {
         try{
             InetAddress myHost = InetAddress.getLocalHost();
-            System.out.println("Host address: "+myHost.getHostAddress());
-            System.out.println("Host name: "+myHost.getHostName());
+            System.out.println("Host address: " + myHost.getHostAddress());
+            System.out.println("Host name: " + myHost.getHostName());
         }catch(UnknownHostException ex){
             ex.printStackTrace();
         }

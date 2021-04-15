@@ -1,6 +1,4 @@
-package Lab7;
-
-import Assignment.*;
+package NangCao7;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -101,8 +99,6 @@ public class LoadingScreen extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(LoadingScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

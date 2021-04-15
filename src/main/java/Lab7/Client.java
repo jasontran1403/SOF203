@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Slide7;
+package Lab7;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -16,7 +16,7 @@ import java.net.Socket;
  *
  * @author Administrator
  */
-public class TCPClientTong {
+public class Client {
 
     public static void main(String[] args) throws IOException {
         String sentence;

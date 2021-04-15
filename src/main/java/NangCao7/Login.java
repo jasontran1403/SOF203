@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Lab7;
+package NangCao7;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,20 +17,7 @@ import javax.swing.JOptionPane;
  * @author jason
  */
 public class Login extends javax.swing.JFrame {
-
-    public class Username {
-
-        public String username;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-        
-    }
+    public static String username;
     private static Login lg;
     private static SplashScreen splashScreen;
 
@@ -45,22 +32,17 @@ public class Login extends javax.swing.JFrame {
         LoadData();
     }
 
-    public void ChangeForm() {
-        //Registration rg = new Registration();
-        //rg.setVisible(true);
-        //this.dispose();
-    }
 
     public void LoadData() {
         System.out.println("----------------------");
         Connection conn = null;
         try {
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
+            String dbURL = "jdbc:mysql://localhost:3306/ListAccount";
             String username = "root";
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
 
-            String sql = "select * from ListAccount";
+            String sql = "select * from AccountList";
             // Tạo đối tượng thực thi câu lệnh Select
             java.sql.Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -164,8 +146,6 @@ public class Login extends javax.swing.JFrame {
         jButton3.setBackground(new java.awt.Color(0, 255, 204));
         jButton3.setText("Login By QR Code");
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
-
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\login.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,8 +180,7 @@ public class Login extends javax.swing.JFrame {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getUsername().equals(id)) {
                 if (list.get(i).getPassword().equals(pw)) {
-                    Username us = new Username();
-                    us.setUsername(list.get(i).getUsername());
+                    
                     check = true;
                 } else {
                     check = false;
@@ -210,9 +189,9 @@ public class Login extends javax.swing.JFrame {
             }
         }
 
-        if (check) {
-
+        if (check == true) {
             this.dispose();
+            username = id;
             splashScreen = new SplashScreen();
 
         } else {
@@ -224,7 +203,6 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        ChangeForm();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -252,6 +230,7 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
