@@ -15,7 +15,7 @@ import javax.swing.Timer;
  * @author Jason
  */
 public class SplashScreen extends JWindow {
-
+    String welcome;
     private static Login lg;
     private static JProgressBar progressBar = new JProgressBar();
     private static SplashScreen splashScreen;
@@ -40,6 +40,7 @@ public class SplashScreen extends JWindow {
 
     public SplashScreen() {
         createSplash();
+        
     }
 
     private void createSplash() {

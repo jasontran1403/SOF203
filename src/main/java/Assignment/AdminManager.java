@@ -44,6 +44,7 @@ public class AdminManager extends javax.swing.JFrame {
     private String header[] = {"Student ID", "Fullname", "Email", "Phone Number", "Sex", "Address"};
     private DefaultTableModel tblModel = new DefaultTableModel(header, 0);
     List<Student> liststu = new ArrayList<>();
+    private String welcome;
 
     /**
      * Creates new form AdminManager
@@ -68,7 +69,7 @@ public class AdminManager extends javax.swing.JFrame {
         Connection conn = null;
         try {
             String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "sa";
+            String username = "root";
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
 
@@ -206,7 +207,7 @@ public class AdminManager extends javax.swing.JFrame {
             String add = txaAdd.getText();
 
             String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "sa";
+            String username = "root";
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
 
@@ -260,36 +261,42 @@ public class AdminManager extends javax.swing.JFrame {
     }
 
     void DeleteStudent() {
+
         Connection conn = null;
-        try {
-            String stuid = txtStudentID.getText();
+        int choice = JOptionPane.showConfirmDialog(this, "Do you want to update?", "Do you want to update this student", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                String stuid = txtStudentID.getText();
 
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "sa";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
+                String dbURL = "jdbc:mysql://localhost:3306/Account";
+                String username = "root";
+                String password = "Hai14031993";
+                conn = DriverManager.getConnection(dbURL, username, password);
 
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from ListStudent";
-            ResultSet rs = st.executeQuery(sql);
+                // Kiểm tra trước khi thêm
+                java.sql.Statement st = conn.createStatement();
+                String sql = "select * from ListStudent";
+                ResultSet rs = st.executeQuery(sql);
 
-            // Trong khi chưa hết dữ liệu
-            while (rs.next()) {
-                if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    CallableStatement st1 = conn.prepareCall("{CALLL SP_DELETE('" + stuid + "')}");
+                // Trong khi chưa hết dữ liệu
+                while (rs.next()) {
+                    if (rs.getString("studentid").equals(txtStudentID.getText())) {
+                        CallableStatement st1 = conn.prepareCall("{CALLL SP_DELETE('" + stuid + "')}");
 
-                    st1.executeUpdate();
-                    LoadData();
-                    fillTable();
-                    IU = null;
+                        st1.executeUpdate();
+                        LoadData();
+                        fillTable();
+                        JOptionPane.showMessageDialog(this, "Delete this student successfully!");
+                        IU = null;
+                    }
                 }
-            }
 
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
+                // Thực thi
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     boolean pic = false;
@@ -297,6 +304,7 @@ public class AdminManager extends javax.swing.JFrame {
     public static boolean take = false;
 
     String picker = "";
+
     void GetPath() {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -324,7 +332,7 @@ public class AdminManager extends javax.swing.JFrame {
             btn1.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        BufferedImage image = webcam.getImage();                     
+                        BufferedImage image = webcam.getImage();
                         GetPath();
                         IU = picker;
                         System.out.println(IU + " -- " + picker);
@@ -354,35 +362,51 @@ public class AdminManager extends javax.swing.JFrame {
 
     void UpdateStudent() {
         Connection conn = null;
-        try {
-            String stuid = txtStudentID.getText();
-
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "sa";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
-
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from ListStudent";
-            ResultSet rs = st.executeQuery(sql);
-
-            // Trong khi chưa hết dữ liệu
-            while (rs.next()) {
-                if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    PreparedStatement st1 = conn.prepareStatement("UPDATE ListStudent SET fullname=?, email=?, phonenum=?, sex=?, address=?, imgpath=?");
-
-                    st1.executeUpdate();
-                    LoadData();
-                    fillTable();
-                    IU = null;
+        int choice = JOptionPane.showConfirmDialog(this, "Do you want to update?", "Do you want to update this student", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                String stuid = txtStudentID.getText();
+                String sex = "";
+                if (rdoMale.isSelected()) {
+                    sex = "Male";
+                } else {
+                    sex = "Female";
                 }
-            }
+                String dbURL = "jdbc:mysql://localhost:3306/Account";
+                String username = "root";
+                String password = "Hai14031993";
+                conn = DriverManager.getConnection(dbURL, username, password);
 
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
+                // Kiểm tra trước khi thêm
+                java.sql.Statement st = conn.createStatement();
+                String sql = "select * from ListStudent";
+                ResultSet rs = st.executeQuery(sql);
+
+                // Trong khi chưa hết dữ liệu
+                while (rs.next()) {
+                    if (rs.getString("studentid").equals(txtStudentID.getText())) {
+                        PreparedStatement st1 = conn.prepareStatement("UPDATE ListStudent SET fullname=?, email=?, phonenum=?, sex=?, address=?, imgpath=? WHERE studentid=?");
+
+                        st1.setString(1, txtFullname.getText());
+                        st1.setString(2, txtEmail.getText());
+                        st1.setString(3, txtPhoneNum.getText());
+                        st1.setString(4, sex);
+                        st1.setString(5, txaAdd.getText());
+                        st1.setString(6, IU);
+                        st1.setString(7, txtStudentID.getText());
+                        st1.executeUpdate();
+                        LoadData();
+                        fillTable();
+                        JOptionPane.showMessageDialog(this, "Update information successfully!");
+                    }
+                }
+
+                // Thực thi
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     /**
@@ -508,7 +532,6 @@ public class AdminManager extends javax.swing.JFrame {
         lblImg.setVerifyInputWhenFocusTarget(false);
         jPanel1.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 150, 150));
 
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\new.png")); // NOI18N
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
@@ -516,7 +539,6 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 70, 40));
 
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -524,7 +546,6 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 70, 40));
 
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -532,7 +553,6 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 300, 70, 40));
 
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\edit.png")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -548,7 +568,7 @@ public class AdminManager extends javax.swing.JFrame {
         rdoFemale.setText("Female");
         jPanel1.add(rdoFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, -1, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\up.png")); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/SOF203/src/main/java/Assignment/up.png")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -556,7 +576,7 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, 70, 30));
 
-        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\remove.png")); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/SOF203/src/main/java/Assignment/remove.png")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -580,7 +600,7 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 260, -1, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\bg2.png")); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/SOF203/src/main/java/Assignment/bg2.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(-2, 0, 820, 700));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

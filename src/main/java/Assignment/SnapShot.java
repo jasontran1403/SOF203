@@ -21,7 +21,6 @@ import javax.swing.Timer;
 import org.apache.commons.io.FileUtils;
 
 public class SnapShot extends javax.swing.JFrame implements Runnable, ThreadFactory {
-
     AdminManager am = new AdminManager();
     private WebcamPanel panel = null;
     private Webcam webcam = null;

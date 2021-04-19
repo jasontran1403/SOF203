@@ -6,6 +6,7 @@
 package Assignment;
 
 import Scan.QrCapture;
+import Slide8.SendMail;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
@@ -24,9 +25,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -71,7 +82,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
         Connection conn = null;
         try {
             String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "sa";
+            String username = "root";
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
 
@@ -88,6 +99,8 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
 
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
+                acc.setEmail(rs.getString("email"));
+                acc.setPhonenum(rs.getString("num"));
                 acc.setRole(rs.getString("role"));
 
                 list.add(acc);
@@ -103,8 +116,9 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
     }
 
     JFrame wc = new JFrame();
+
     public void QR_Reader() {
-        
+
         setTitle("Reading QR Code");
         Dimension size = WebcamResolution.VGA.getSize();
         webcam = Webcam.getWebcams().get(0);
@@ -178,7 +192,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
         t.setDaemon(true);
         return t;
     }
-    
+
     public void Login() {
         String id = txtUser.getText();
         String pw = txtPass.getText();
@@ -229,6 +243,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        btnForgot = new javax.swing.JButton();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -294,7 +309,13 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
         });
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 180, -1));
 
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\login.png")); // NOI18N
+        btnForgot.setText("Forgot Password?");
+        btnForgot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForgotActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnForgot, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 320, 180, 40));
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -323,6 +344,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Login();
+      
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -338,6 +360,56 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void btnForgotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForgotActionPerformed
+        // TODO add your handling code here:
+        String to = JOptionPane.showInputDialog("Enter your email to recover password!");
+        String num = JOptionPane.showInputDialog("Enter your phone number to confirm this is your account!");
+        String pw = "";
+        boolean rec = false;
+        for (Account account : list) {
+            if (to.equals(account.getEmail()) && num.equals(account.getPhonenum())) {
+                pw = account.getPassword();
+                rec = true;
+            } else {
+                rec = false;
+                JOptionPane.showMessageDialog(this, "Email or phone number doesnt match any account!");
+            }
+        }
+
+        if (rec) {
+            try {
+
+                System.out.println(pw);
+                Properties p = new Properties();
+                p.put("mail.smtp.auth", "true");
+                p.put("mail.smtp.starttls.enable", "true");
+                p.put("mail.smtp.host", "smtp.gmail.com");
+                p.put("mail.smtp.port", 587);
+                String accountName = "haitnps14692@fpt.edu.vn";
+                String accountPassword = "Hai14031993";
+                Session s = Session.getInstance(p,
+                        new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(accountName, accountPassword);
+                    }
+                });
+                String from = "haitnps14692@fpt.edu.vn";
+                String subject = "Recover password from FPT PolyTechnic!";
+                String body = "<html><b style=" + "color:blue>" + "Your old password is: " + pw + "<html><br>Please change it as soon as posible!";
+                Message msg = new MimeMessage(s);
+                msg.setFrom(new InternetAddress(from));
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+                msg.setSubject(subject);
+                msg.setContent(body, "text/html; charset=utf-8");
+                Transport.send(msg);
+                JOptionPane.showMessageDialog(this, "Recover your password is successfully, please check you email!");
+            } catch (MessagingException ex) {
+                Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_btnForgotActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -352,16 +424,21 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -376,6 +453,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
+    private javax.swing.JButton btnForgot;
     private javax.swing.JCheckBox chkShow;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

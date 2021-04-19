@@ -6,31 +6,23 @@
 package Assignment;
 
 import Slide8.SendMail;
-import static java.awt.image.ImageObserver.HEIGHT;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
@@ -48,7 +40,7 @@ public class StudentManager extends javax.swing.JFrame {
     List<Result> search = new ArrayList<>();
     private String header[] = {"Student ID", "Fullname", "Java", "JavaScript", "HTML/CSS", "AVERAGE"};
     private DefaultTableModel tblModel = new DefaultTableModel(header, 0);
-
+    private String welcome;
     /**
      * Creates new form StudentManager
      */
@@ -57,6 +49,7 @@ public class StudentManager extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         LoadList();
         LoadData();
+        LoadStu();
         tblList.getColumnModel().getColumn(0).setPreferredWidth(10);
         tblList.getColumnModel().getColumn(1).setPreferredWidth(80);
         tblList.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -228,6 +221,44 @@ public class StudentManager extends javax.swing.JFrame {
         }
     }
 
+    void LoadStu() {
+        liststu.clear();
+        System.out.println("----------------------");
+        Connection conn = null;
+        try {
+            String dbURL = "jdbc:mysql://localhost:3306/Account";
+            String username = "root";
+            String password = "Hai14031993";
+            conn = DriverManager.getConnection(dbURL, username, password);
+
+            String sql = "select * from ListStudent";
+            // Tạo đối tượng thực thi câu lệnh Select
+            java.sql.Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            // Thực thi
+            // Nếu sách không tồn tại
+            while (rs.next()) {
+                Student list = new Student();
+
+                list.setStudentID(rs.getString("studentid"));
+                list.setFullname(rs.getString("fullname"));
+                list.setEmail(rs.getString("email"));
+                list.setPhonenum(rs.getString("phonenum"));
+                list.setSex(rs.getString("sex"));
+                list.setAdd(rs.getString("address"));
+                list.setImagepath(rs.getString("imgpath"));
+                liststu.add(list);
+            }
+            conn.close();
+            st.close();
+            rs.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     void AddResult() {
         Connection conn = null;
         String sql1 = "INSERT INTO StudentResult (studentid, java, javascript, htmlcss, average) VALUES (?, ?, ?, ?, ?)";
@@ -269,7 +300,6 @@ public class StudentManager extends javax.swing.JFrame {
                 ps.setString(5, String.valueOf(avg));
 
                 System.out.println("Thêm thành công");
-                SendMail();
 
                 int row = ps.executeUpdate();
                 if (row != 0) {
@@ -287,39 +317,43 @@ public class StudentManager extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
-        
     }
 
     void DeleteResult() {
         Connection conn = null;
-        try {
-            String stuid = txtStudentID.getText();
+        int choice = JOptionPane.showConfirmDialog(this, "Do you want to update?", "Do you want to update this student", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                String stuid = txtStudentID.getText();
 
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "root";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
+                String dbURL = "jdbc:mysql://localhost:3306/Account";
+                String username = "root";
+                String password = "Hai14031993";
+                conn = DriverManager.getConnection(dbURL, username, password);
 
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from StudentResult";
-            ResultSet rs = st.executeQuery(sql);
+                // Kiểm tra trước khi thêm
+                java.sql.Statement st = conn.createStatement();
+                String sql = "select * from StudentResult";
+                ResultSet rs = st.executeQuery(sql);
 
-            // Trong khi chưa hết dữ liệu
-            while (rs.next()) {
-                if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    PreparedStatement st1 = conn.prepareStatement("DELETE FROM StudentResult WHERE studentid=" + "'" + stuid + "'");
+                // Trong khi chưa hết dữ liệu
+                while (rs.next()) {
+                    if (rs.getString("studentid").equals(txtStudentID.getText())) {
+                        PreparedStatement st1 = conn.prepareStatement("DELETE FROM StudentResult WHERE studentid=" + "'" + stuid + "'");
 
-                    st1.executeUpdate();
-                    LoadData();
-                    fillTable();
+                        st1.executeUpdate();
+                        LoadData();
+                        fillTable();
+                        JOptionPane.showMessageDialog(this, "Delete result this student successfully");
+                    }
                 }
-            }
 
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
+                // Thực thi
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     void Search() {
@@ -344,52 +378,56 @@ public class StudentManager extends javax.swing.JFrame {
 
     void Update() {
         Connection conn = null;
-        try {
-            String stuid = txtStudentID.getText();
-            String java = txtJava.getText();
-            String javascript = txtJavaScript.getText();
-            String htmlcss = txtHTMLCSS.getText();
-            double avg = (Double.parseDouble(java) + Double.parseDouble(javascript) + Double.parseDouble(htmlcss)) / 3;
+        int choice = JOptionPane.showConfirmDialog(this, "Do you want to update?", "Do you want to update this student", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                String stuid = txtStudentID.getText();
+                String java = txtJava.getText();
+                String javascript = txtJavaScript.getText();
+                String htmlcss = txtHTMLCSS.getText();
+                double avg = (Double.parseDouble(java) + Double.parseDouble(javascript) + Double.parseDouble(htmlcss)) / 3;
 
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "root";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
+                String dbURL = "jdbc:mysql://localhost:3306/Account";
+                String username = "root";
+                String password = "Hai14031993";
+                conn = DriverManager.getConnection(dbURL, username, password);
 
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from StudentResult";
-            ResultSet rs = st.executeQuery(sql);
+                // Kiểm tra trước khi thêm
+                java.sql.Statement st = conn.createStatement();
+                String sql = "select * from StudentResult";
+                ResultSet rs = st.executeQuery(sql);
 
-            // Trong khi chưa hết dữ liệu
-            String query = "UPDATE StudentResult SET java=?, javascript=?, htmlcss=?, average=? WHERE studentid=?";
-            boolean check = false;
-            while (rs.next()) {
-                if (rs.getString("studentid").equals(stuid)) {
+                // Trong khi chưa hết dữ liệu
+                String query = "UPDATE StudentResult SET java=?, javascript=?, htmlcss=?, average=? WHERE studentid=?";
+                boolean check = false;
+                while (rs.next()) {
+                    if (rs.getString("studentid").equals(stuid)) {
 
-                    PreparedStatement st1 = conn.prepareStatement(query);
-                    st1.setString(1, java);
-                    st1.setString(2, javascript);
-                    st1.setString(3, htmlcss);
-                    st1.setString(4, String.valueOf(avg));
-                    st1.setString(5, stuid);
-                    st1.executeUpdate();
+                        PreparedStatement st1 = conn.prepareStatement(query);
+                        st1.setString(1, java);
+                        st1.setString(2, javascript);
+                        st1.setString(3, htmlcss);
+                        st1.setString(4, String.valueOf(avg));
+                        st1.setString(5, stuid);
+                        st1.executeUpdate();
 
-                    check = true;
+                        check = true;
+                    }
                 }
-            }
-            if (check) {
-                LoadData();
-                fillTable();
-                JOptionPane.showMessageDialog(this, "Update successfully!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Cannot find this Student ID!");
-            }
+                if (check) {
+                    LoadData();
+                    fillTable();
+                    JOptionPane.showMessageDialog(this, "Update result this student successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cannot find this Student ID!");
+                }
 
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
+                // Thực thi
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     int i = 0;
@@ -474,10 +512,10 @@ public class StudentManager extends javax.swing.JFrame {
     void SendMail() {
         String to = "", name = "";
         try {
-            for (Result rs : search) {
-                if(txtStudentID.getText().equals(rs.getStuid())) {
-                    to = rs.getEmail();
-                    name = rs.getFullname();
+            for (Student stu : liststu) {
+                if (txtStudentID.getText().equals(stu.getStudentID())) {
+                    to = stu.getEmail();
+                    name = stu.getFullname();
                 }
             }
             Properties p = new Properties();
@@ -489,12 +527,13 @@ public class StudentManager extends javax.swing.JFrame {
             String accountPassword = "Hai14031993";
             Session s = Session.getInstance(p,
                     new javax.mail.Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(accountName, accountPassword);
-                        }});          
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(accountName, accountPassword);
+                }
+            });
             String from = "haitnps14692@fpt.edu.vn";
             String subject = "Result of Semester 3, Application Developer Major";
-            String body = "<html><b style=" + "color:blue>" +  "Congratulations to MR: " + name + " has earned Excellent in Semester 3 of Application Developer Major</b>" + "<html><br>Java: " + txtJava.getText() + "<html><br>JavaScript: " + txtJavaScript.getText() + "<html><br>HTML/CSS: " + txtHTMLCSS.getText() + "<html><br>Average: " + String.format("%.2f", (Double.parseDouble(txtJava.getText()) + Double.parseDouble(txtJavaScript.getText()) + Double.parseDouble(txtHTMLCSS.getText())) / 3);
+            String body = "<html><b style=" + "color:blue>" + "Congratulations to MR: " + name + " has earned Excellent in Semester 3 of Application Developer Major</b>" + "<html><br>Java: " + txtJava.getText() + "<html><br>JavaScript: " + txtJavaScript.getText() + "<html><br>HTML/CSS: " + txtHTMLCSS.getText() + "<html><br>Average: " + String.format("%.2f", (Double.parseDouble(txtJava.getText()) + Double.parseDouble(txtJavaScript.getText()) + Double.parseDouble(txtHTMLCSS.getText())) / 3);
             Message msg = new MimeMessage(s);
             msg.setFrom(new InternetAddress(from));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
@@ -504,7 +543,7 @@ public class StudentManager extends javax.swing.JFrame {
 
         } catch (MessagingException ex) {
             Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        }
     }
 
     /**
@@ -567,7 +606,6 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel2.setText("Student ID");
 
         btnSearch.setBackground(new java.awt.Color(0, 255, 204));
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\search.png")); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -608,7 +646,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setLayout(null);
 
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\new.png")); // NOI18N
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
@@ -617,7 +654,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnNew);
         btnNew.setBounds(20, 30, 70, 40);
 
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -626,7 +662,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnSave);
         btnSave.setBounds(20, 80, 70, 40);
 
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -635,7 +670,6 @@ public class StudentManager extends javax.swing.JFrame {
         jPanel4.add(btnDelete);
         btnDelete.setBounds(20, 130, 70, 40);
 
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\edit.png")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -660,13 +694,6 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 153, 153));
         jLabel4.setText("Student ID");
 
-        txtStudentID.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtStudentIDInputMethodTextChanged(evt);
-            }
-        });
         txtStudentID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtStudentIDKeyPressed(evt);
@@ -694,28 +721,24 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 153, 153));
         jLabel9.setText("Average");
 
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\first.png")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\next.png")); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
-        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\previous.png")); // NOI18N
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
-        jButton7.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\last.png")); // NOI18N
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -857,8 +880,6 @@ public class StudentManager extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, -1, -1));
-
-        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\bg.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -890,6 +911,7 @@ public class StudentManager extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         AddResult();
+        SendMail();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
@@ -913,6 +935,40 @@ public class StudentManager extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         Update();
+        String to = "", name = "";
+        try {
+            for (Student stu : liststu) {
+                if (txtStudentID.getText().equals(stu.getStudentID())) {
+                    to = stu.getEmail();
+                    name = stu.getFullname();
+                }
+            }
+            Properties p = new Properties();
+            p.put("mail.smtp.auth", "true");
+            p.put("mail.smtp.starttls.enable", "true");
+            p.put("mail.smtp.host", "smtp.gmail.com");
+            p.put("mail.smtp.port", 587);
+            String accountName = "haitnps14692@fpt.edu.vn";
+            String accountPassword = "Hai14031993";
+            Session s = Session.getInstance(p,
+                    new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(accountName, accountPassword);
+                }
+            });
+            String from = "haitnps14692@fpt.edu.vn";
+            String subject = "Update: Result of Semester 3, Application Developer Major";
+            String body = "<html><b style=" + "color:blue>" + "Congratulations to MR: " + name + " has earned Excellent in Semester 3 of Application Developer Major</b>" + "<html><br>Java: " + txtJava.getText() + "<html><br>JavaScript: " + txtJavaScript.getText() + "<html><br>HTML/CSS: " + txtHTMLCSS.getText() + "<html><br>Average: " + String.format("%.2f", (Double.parseDouble(txtJava.getText()) + Double.parseDouble(txtJavaScript.getText()) + Double.parseDouble(txtHTMLCSS.getText())) / 3);
+            Message msg = new MimeMessage(s);
+            msg.setFrom(new InternetAddress(from));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            msg.setSubject(subject);
+            msg.setContent(body, "text/html; charset=utf-8");
+            Transport.send(msg);
+
+        } catch (MessagingException ex) {
+            Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -934,11 +990,6 @@ public class StudentManager extends javax.swing.JFrame {
         // TODO add your handling code here:
         Last();
     }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void txtStudentIDInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtStudentIDInputMethodTextChanged
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_txtStudentIDInputMethodTextChanged
 
     private void txtStudentIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStudentIDKeyPressed
         // TODO add your handling code here:

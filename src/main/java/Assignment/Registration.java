@@ -170,7 +170,7 @@ public class Registration extends javax.swing.JFrame {
                     // Câu lệnh xem dữ liệu
 
                     if (check) {
-                        String sql1 = "INSERT INTO ListAccount VALUES ('" + id + "', '" + pw1 + "', '" + jobpos + "');";
+                        String sql1 = "INSERT INTO ListAccount VALUES ('" + id + "', '" + pw1 + "', '" + email + "', '" + phonenum + "', '" + jobpos + "');";
                         // Tạo đối tượng thực thi câu lệnh Select
                         java.sql.Statement st1 = conn.createStatement();
                         int rs1 = st1.executeUpdate(sql1);
@@ -307,7 +307,7 @@ public class Registration extends javax.swing.JFrame {
         frame.setPreferredSize(new Dimension(600, 480));
         frame.setLocationRelativeTo(this);
         if (txtID.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Please enter Student ID before taking picture!");
+            JOptionPane.showMessageDialog(this, "Please enter Employee ID before taking picture!");
             txtID.requestFocus();
         } else {
 
@@ -529,8 +529,6 @@ public class Registration extends javax.swing.JFrame {
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
         // TODO add your handling code here:
         SignUp();
-
-
     }//GEN-LAST:event_btnSignUpActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed

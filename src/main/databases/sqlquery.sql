@@ -3,7 +3,9 @@ USE Account;
 
 CREATE TABLE ListAccount (
 username VARCHAR(32), 
-password VARCHAR(16), 
+password VARCHAR(16),
+email VARCHAR(50), 
+num VARCHAR(14),
 role VARCHAR(20));
 
 CREATE TABLE ListStudent (
