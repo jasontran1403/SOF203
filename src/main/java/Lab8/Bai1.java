@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package LAB8;
+package Lab8;
 
 import java.io.File;
 import java.util.Date;

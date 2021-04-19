@@ -5,6 +5,7 @@
  */
 package Assignment;
 
+import Slide8.SendMail;
 import static java.awt.image.ImageObserver.HEIGHT;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.Message;
@@ -472,7 +475,7 @@ public class StudentManager extends javax.swing.JFrame {
         String to = "", name = "";
         try {
             for (Result rs : search) {
-                if (txtStudentID.getText().equals(rs.getStuid())) {
+                if(txtStudentID.getText().equals(rs.getStuid())) {
                     to = rs.getEmail();
                     name = rs.getFullname();
                 }
@@ -486,30 +489,22 @@ public class StudentManager extends javax.swing.JFrame {
             String accountPassword = "Hai14031993";
             Session s = Session.getInstance(p,
                     new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(accountName, accountPassword);
-                }
-            });
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(accountName, accountPassword);
+                        }});          
             String from = "haitnps14692@fpt.edu.vn";
-            String subject = "Result of Semester 3, Appication";
-            String body = "Congratulations to MR: " + name + " has earned Excellent in Semester 3 of Application Major" + "\nJava: " + txtJava.getText() + "\nJavaScript: " + txtJavaScript.getText() + "\nHTML/CSS: " + txtHTMLCSS.getText() + "\nAverage: " + String.format("%.2f", (Double.parseDouble(txtJava.getText()) + Double.parseDouble(txtJavaScript.getText()) + Double.parseDouble(txtHTMLCSS.getText())) / 3);
+            String subject = "Result of Semester 3, Application Developer Major";
+            String body = "<html><b style=" + "color:blue>" +  "Congratulations to MR: " + name + " has earned Excellent in Semester 3 of Application Developer Major</b>" + "<html><br>Java: " + txtJava.getText() + "<html><br>JavaScript: " + txtJavaScript.getText() + "<html><br>HTML/CSS: " + txtHTMLCSS.getText() + "<html><br>Average: " + String.format("%.2f", (Double.parseDouble(txtJava.getText()) + Double.parseDouble(txtJavaScript.getText()) + Double.parseDouble(txtHTMLCSS.getText())) / 3);
             Message msg = new MimeMessage(s);
             msg.setFrom(new InternetAddress(from));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             msg.setSubject(subject);
             msg.setContent(body, "text/html; charset=utf-8");
-            msg.setSentDate(new Date());
-
-            //3. dinh nghia loai noi dung cua message
-            MimeBodyPart textPart = new MimeBodyPart();
-            textPart.setContent(body, "text/plain");
-            Multipart mp = new MimeMultipart();
-            mp.addBodyPart(textPart);
-            msg.setContent(mp);
-
             Transport.send(msg);
+
         } catch (MessagingException ex) {
-        }
+            Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
+        }       
     }
 
     /**

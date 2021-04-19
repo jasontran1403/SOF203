@@ -370,7 +370,7 @@ public class AdminManager extends javax.swing.JFrame {
             // Trong khi chưa hết dữ liệu
             while (rs.next()) {
                 if (rs.getString("studentid").equals(txtStudentID.getText())) {
-                    CallableStatement st1 = conn.prepareCall("{CALLL SP_DELETE('" + stuid + "')}");
+                    PreparedStatement st1 = conn.prepareStatement("UPDATE ListStudent SET fullname=?, email=?, phonenum=?, sex=?, address=?, imgpath=?");
 
                     st1.executeUpdate();
                     LoadData();
