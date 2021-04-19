@@ -49,28 +49,16 @@ delimiter ;
 
 DROP PROCEDURE SP_INSERT;
 CALL SP_INSERT ('PS14692', N'Trần Nguyên Hải', 'haitn14692@fpt.edu.vn', '0934513968', 'Nam', N'12 Còn lâu mới nói', 'C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\PS14692.png');
-
-delimiter //
-
-CREATE PROCEDURE SP_SHOW ()
-  BEGIN
-      SELECT StudentResult.studentid AS Stuid, ListStudent.fullname AS fullname, java, javascript, htmlcss, average FROM StudentResult
-      INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid
-      order by AVERAGE DESC LIMIT 3;
-  END//
-
-delimiter ;
-
-
-
+INSERT INTO StudentResult VALUES (null, 'PS14692', 9.5, 9.9, 9.6, 9.67);
+select studentresult.studentid, ListStudent.fullname, java, javascript, htmlcss, average FROM StudentResult
+INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid;
 
 SELECT * FROM ListAccount;
 SELECT * FROM ListStudent;
 SELECT * FROM StudentResult;
 DELETE FROM ListStudent WHERE studentid = '3';
 CALL SP_DELETE('');
-INSERT INTO ListAccount VALUES ('Hai', '1234', null);
-INSERT INTO ListAccount VALUES ('Jason', '1234', null);
+
 DROP TABLE ListAccount;
 DROP TABLE StudentResult;
 DROP TABLE ListStudent;

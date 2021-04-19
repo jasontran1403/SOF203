@@ -16,17 +16,19 @@ public class Result {
     private double javascript;
     private double htmlcss;
     private double average;
+    private String email;
 
     public Result() {
     }
 
-    public Result(String stuid, String fullname, double java, double javascript, double htmlcss, double average) {
+    public Result(String stuid, String fullname, double java, double javascript, double htmlcss, double average, String email) {
         this.stuid = stuid;
         this.fullname = fullname;
         this.java = java;
         this.javascript = javascript;
         this.htmlcss = htmlcss;
         this.average = average;
+        this.email = email;
     }
 
     public String getStuid() {
@@ -68,6 +70,16 @@ public class Result {
     public void setHtmlcss(double htmlcss) {
         this.htmlcss = htmlcss;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    
 
     public double getAverage() {
         return (this.java + this.javascript + this.htmlcss)/3;

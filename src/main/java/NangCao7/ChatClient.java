@@ -12,7 +12,7 @@ package NangCao7;
 public class ChatClient {
 
     public static void main(String[] args) {
-        String IPServer = "localhost";
+        String IPServer = "10.82.153.65";
         String[] arguments = new String[]{IPServer};
         new ChatRoom().main(arguments);
         System.out.println(Login.username);

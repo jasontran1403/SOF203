@@ -19,7 +19,7 @@ public class SplashScreen extends JWindow {
     private static Login lg;
     private static JProgressBar progressBar = new JProgressBar();
     private static SplashScreen splashScreen;
-    private static int count = 1, PROGBAR_MAX = 8;
+    private static int count = 1, PROGBAR_MAX = 4;
     private static Timer progressBarTimer;
     LoadingScreen ls = new LoadingScreen();
     ActionListener al = new ActionListener() {

@@ -122,16 +122,16 @@ public class ChatRoom {
             SimpleAttributeSet attrs9 = new SimpleAttributeSet();
             SimpleAttributeSet attrs10 = new SimpleAttributeSet();
 
-            StyleConstants.setIcon(attrs1, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/01.png"));
-            StyleConstants.setIcon(attrs2, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/02.png"));
-            StyleConstants.setIcon(attrs3, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/03.png"));
-            StyleConstants.setIcon(attrs4, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/04.png"));
-            StyleConstants.setIcon(attrs5, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/05.png"));
-            StyleConstants.setIcon(attrs6, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/06.png"));
-            StyleConstants.setIcon(attrs7, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/07.png"));
-            StyleConstants.setIcon(attrs8, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/08.png"));
-            StyleConstants.setIcon(attrs9, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/09.png"));
-            StyleConstants.setIcon(attrs10, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/10.png"));
+            StyleConstants.setIcon(attrs1, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\01.png"));
+            StyleConstants.setIcon(attrs2, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\02.png"));
+            StyleConstants.setIcon(attrs3, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\03.png"));
+            StyleConstants.setIcon(attrs4, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\04.png"));
+            StyleConstants.setIcon(attrs5, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\05.png"));
+            StyleConstants.setIcon(attrs6, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\06.png"));
+            StyleConstants.setIcon(attrs7, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\07.png"));
+            StyleConstants.setIcon(attrs8, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\08.png"));
+            StyleConstants.setIcon(attrs9, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\09.png"));
+            StyleConstants.setIcon(attrs10, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\10.png"));
 
             StyleConstants.setForeground(space, Color.WHITE);
             try {
@@ -386,16 +386,16 @@ public class ChatRoom {
                         }
                         int i = 1;
 
-                        StyleConstants.setIcon(attrs1, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/01.png"));
-                        StyleConstants.setIcon(attrs2, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/02.png"));
-                        StyleConstants.setIcon(attrs3, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/03.png"));
-                        StyleConstants.setIcon(attrs4, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/04.png"));
-                        StyleConstants.setIcon(attrs5, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/05.png"));
-                        StyleConstants.setIcon(attrs6, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/06.png"));
-                        StyleConstants.setIcon(attrs7, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/07.png"));
-                        StyleConstants.setIcon(attrs8, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/08.png"));
-                        StyleConstants.setIcon(attrs9, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/09.png"));
-                        StyleConstants.setIcon(attrs10, Resizer("/Users/jason/Desktop/SOF203/src/main/java/Emoji/10.png"));
+                        StyleConstants.setIcon(attrs1, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\01.png"));
+                        StyleConstants.setIcon(attrs2, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\02.png"));
+                        StyleConstants.setIcon(attrs3, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\03.png"));
+                        StyleConstants.setIcon(attrs4, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\04.png"));
+                        StyleConstants.setIcon(attrs5, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\05.png"));
+                        StyleConstants.setIcon(attrs6, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\06.png"));
+                        StyleConstants.setIcon(attrs7, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\07.png"));
+                        StyleConstants.setIcon(attrs8, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\08.png"));
+                        StyleConstants.setIcon(attrs9, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\09.png"));
+                        StyleConstants.setIcon(attrs10, Resizer("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Emoji\\10.png"));
 
                         String text = words[0];
 

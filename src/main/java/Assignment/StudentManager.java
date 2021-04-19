@@ -11,11 +11,27 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -51,6 +67,52 @@ public class StudentManager extends javax.swing.JFrame {
         model.setRowCount(0);
         for (Result rs : listrs) {
             model.addRow(new Object[]{rs.getStuid(), rs.getFullname(), rs.getJava(), rs.getJavascript(), rs.getHtmlcss(), String.format("%.2f", rs.getAverage())});
+        }
+    }
+
+    boolean ten = false;
+
+    void Change() {
+
+        txtStudentID.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                for (Result student : search) {
+                    if (txtStudentID.getText().equals(student.getStuid())) {
+                        System.out.println("Dung");
+                        ten = true;
+                        break;
+                    } else {
+                        System.out.println("Sai");
+                        ten = false;
+                    }
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                for (Result student : search) {
+                    if (txtStudentID.getText().equals(student.getStuid())) {
+                        System.out.println("Dung");
+                        ten = true;
+                        break;
+                    } else {
+                        System.out.println("Sai");
+                        ten = false;
+                    }
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                //Plain text components don't fire these events.
+            }
+        });
+
+        System.out.println("Dung" + ten);
+        if (ten) {
+            JOptionPane.showMessageDialog(this, txtStudentID.getText());
         }
     }
 
@@ -133,7 +195,7 @@ public class StudentManager extends javax.swing.JFrame {
             String password = "Hai14031993";
             conn = DriverManager.getConnection(dbURL, username, password);
 
-            String sql = "SELECT StudentResult.studentid AS ID, ListStudent.fullname AS name, java, javascript, htmlcss, average FROM StudentResult INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid";
+            String sql = "SELECT StudentResult.studentid AS ID, ListStudent.fullname AS name, java, javascript, htmlcss, average, ListStudent.email AS email FROM StudentResult INNER JOIN ListStudent ON ListStudent.studentid = StudentResult.studentid";
             // Tạo đối tượng thực thi câu lệnh Select
             java.sql.Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -149,6 +211,7 @@ public class StudentManager extends javax.swing.JFrame {
                 list2.setJavascript(rs.getDouble("javascript"));
                 list2.setHtmlcss(rs.getDouble("htmlcss"));
                 list2.setAverage(rs.getDouble("average"));
+                list2.setEmail(rs.getString("email"));
 
                 search.add(list2);
             }
@@ -203,6 +266,7 @@ public class StudentManager extends javax.swing.JFrame {
                 ps.setString(5, String.valueOf(avg));
 
                 System.out.println("Thêm thành công");
+                SendMail();
 
                 int row = ps.executeUpdate();
                 if (row != 0) {
@@ -220,6 +284,7 @@ public class StudentManager extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
+        
     }
 
     void DeleteResult() {
@@ -376,12 +441,12 @@ public class StudentManager extends javax.swing.JFrame {
 
     void Prev() {
         if (txtStudentID.getText().isEmpty()) {
-            txtStudentID.setText(search.get(search.size()-1).getStuid());
-            txtFullname.setText(search.get(search.size()-1).getFullname());
-            txtJava.setText(String.valueOf((search.get(search.size()-1).getJava())));
-            txtJavaScript.setText(String.valueOf((search.get(search.size()-1).getJavascript())));
-            txtHTMLCSS.setText(String.valueOf((search.get(search.size()-1).getHtmlcss())));
-            lblAverage.setText(String.format("%.2f", search.get(search.size()-1).getAverage()));
+            txtStudentID.setText(search.get(search.size() - 1).getStuid());
+            txtFullname.setText(search.get(search.size() - 1).getFullname());
+            txtJava.setText(String.valueOf((search.get(search.size() - 1).getJava())));
+            txtJavaScript.setText(String.valueOf((search.get(search.size() - 1).getJavascript())));
+            txtHTMLCSS.setText(String.valueOf((search.get(search.size() - 1).getHtmlcss())));
+            lblAverage.setText(String.format("%.2f", search.get(search.size() - 1).getAverage()));
         } else {
             int j = 0;
             for (int k = 0; k < search.size(); k++) {
@@ -400,6 +465,50 @@ public class StudentManager extends javax.swing.JFrame {
             txtJavaScript.setText(String.valueOf(search.get(j).getJavascript()));
             txtHTMLCSS.setText(String.valueOf((search.get(j).getHtmlcss())));
             lblAverage.setText(String.format("%.2f", search.get(j).getAverage()));
+        }
+    }
+
+    void SendMail() {
+        String to = "", name = "";
+        try {
+            for (Result rs : search) {
+                if (txtStudentID.getText().equals(rs.getStuid())) {
+                    to = rs.getEmail();
+                    name = rs.getFullname();
+                }
+            }
+            Properties p = new Properties();
+            p.put("mail.smtp.auth", "true");
+            p.put("mail.smtp.starttls.enable", "true");
+            p.put("mail.smtp.host", "smtp.gmail.com");
+            p.put("mail.smtp.port", 587);
+            String accountName = "haitnps14692@fpt.edu.vn";
+            String accountPassword = "Hai14031993";
+            Session s = Session.getInstance(p,
+                    new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(accountName, accountPassword);
+                }
+            });
+            String from = "haitnps14692@fpt.edu.vn";
+            String subject = "Result of Semester 3, Appication";
+            String body = "Congratulations to MR: " + name + " has earned Excellent in Semester 3 of Application Major" + "\nJava: " + txtJava.getText() + "\nJavaScript: " + txtJavaScript.getText() + "\nHTML/CSS: " + txtHTMLCSS.getText() + "\nAverage: " + String.format("%.2f", (Double.parseDouble(txtJava.getText()) + Double.parseDouble(txtJavaScript.getText()) + Double.parseDouble(txtHTMLCSS.getText())) / 3);
+            Message msg = new MimeMessage(s);
+            msg.setFrom(new InternetAddress(from));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            msg.setSubject(subject);
+            msg.setContent(body, "text/html; charset=utf-8");
+            msg.setSentDate(new Date());
+
+            //3. dinh nghia loai noi dung cua message
+            MimeBodyPart textPart = new MimeBodyPart();
+            textPart.setContent(body, "text/plain");
+            Multipart mp = new MimeMultipart();
+            mp.addBodyPart(textPart);
+            msg.setContent(mp);
+
+            Transport.send(msg);
+        } catch (MessagingException ex) {
         }
     }
 
@@ -555,6 +664,19 @@ public class StudentManager extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 153, 153));
         jLabel4.setText("Student ID");
+
+        txtStudentID.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtStudentIDInputMethodTextChanged(evt);
+            }
+        });
+        txtStudentID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtStudentIDKeyPressed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 153, 153));
@@ -817,6 +939,30 @@ public class StudentManager extends javax.swing.JFrame {
         // TODO add your handling code here:
         Last();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void txtStudentIDInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtStudentIDInputMethodTextChanged
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtStudentIDInputMethodTextChanged
+
+    private void txtStudentIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStudentIDKeyPressed
+        // TODO add your handling code here:
+        try {
+            for (Result student : search) {
+                if (txtStudentID.getText().equals(student.getStuid())) {
+                    txtFullname.setText(student.getFullname());
+                    break;
+                }
+                if (!txtStudentID.getText().equals(student.getStuid())) {
+                    txtFullname.setText("");
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+
+    }//GEN-LAST:event_txtStudentIDKeyPressed
 
     /**
      * @param args the command line arguments

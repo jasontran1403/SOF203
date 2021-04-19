@@ -8,17 +8,28 @@ package Assignment;
 import static Assignment.AdminManager.take;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,7 +56,7 @@ public class Registration extends javax.swing.JFrame {
         lg.setVisible(true);
         this.dispose();
     }
-    
+
     List<Account> list = new ArrayList<>();
     String id, pw1, pw2, fullname, address, phonenum, email, jobpos;
 
@@ -114,10 +125,7 @@ public class Registration extends javax.swing.JFrame {
             return;
         }
 
-        if (img.getSelectedFile() == null) {
-            JOptionPane.showMessageDialog(this, "Please upload your photo.");
-            return;
-        } else if (IU == null) {
+        if (IU == null) {
             JOptionPane.showMessageDialog(this, "Please upload your photo.");
             return;
         }
@@ -131,41 +139,47 @@ public class Registration extends javax.swing.JFrame {
                         return;
                     }
                 }
-                Connection conn = null;
-        System.out.println("----------------------");
-        try {            
-            String dbURL = "jdbc:mysql://localhost:3306/Account";
-            String username = "root";
-            String password = "Hai14031993";
-            conn = DriverManager.getConnection(dbURL, username, password);
+                try {
+                    QRCode();
+                    System.out.println("QR COde thành công");
+                } catch (Exception e) {
 
-            // Kiểm tra trước khi thêm
-            java.sql.Statement st = conn.createStatement();
-            String sql = "select * from ListAccount";
-            ResultSet rs = st.executeQuery(sql);
-
-            // Trong khi chưa hết dữ liệu
-            boolean check = true;
-            while (rs.next()) {
-                if (rs.getString("username").equals(id)) {
-                    JOptionPane.showMessageDialog(this, "This username is existed!");
-                    check = false;
-                    return;
                 }
-            }
-            // Câu lệnh xem dữ liệu
+                Connection conn = null;
+                System.out.println("----------------------");
+                try {
+                    String dbURL = "jdbc:mysql://localhost:3306/Account";
+                    String username = "root";
+                    String password = "Hai14031993";
+                    conn = DriverManager.getConnection(dbURL, username, password);
 
-            if (check) {
-                String sql1 = "INSERT INTO ListAccount VALUES ('" + id + "', '" + pw1 + "', '" + jobpos + "');";
-                // Tạo đối tượng thực thi câu lệnh Select
-                java.sql.Statement st1 = conn.createStatement();
-                int rs1 = st1.executeUpdate(sql1);
-                System.out.println("Thêm thành công");
-            }
-            // Thực thi
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                    // Kiểm tra trước khi thêm
+                    java.sql.Statement st = conn.createStatement();
+                    String sql = "select * from ListAccount";
+                    ResultSet rs = st.executeQuery(sql);
+
+                    // Trong khi chưa hết dữ liệu
+                    boolean check = true;
+                    while (rs.next()) {
+                        if (rs.getString("username").equals(id)) {
+                            JOptionPane.showMessageDialog(this, "This username is existed!");
+                            check = false;
+                            return;
+                        }
+                    }
+                    // Câu lệnh xem dữ liệu
+
+                    if (check) {
+                        String sql1 = "INSERT INTO ListAccount VALUES ('" + id + "', '" + pw1 + "', '" + jobpos + "');";
+                        // Tạo đối tượng thực thi câu lệnh Select
+                        java.sql.Statement st1 = conn.createStatement();
+                        int rs1 = st1.executeUpdate(sql1);
+                        System.out.println("Thêm thành công");
+                    }
+                    // Thực thi
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 JOptionPane.showMessageDialog(this, "Add employee sucessfully!!!", "OK", JOptionPane.OK_OPTION);
             }
 
@@ -215,6 +229,52 @@ public class Registration extends javax.swing.JFrame {
         IU = null;
     }
 
+    public static void createQR(String data, String path,
+            String charset, Map hashMap,
+            int height, int width)
+            throws WriterException, IOException {
+
+        BitMatrix matrix = new MultiFormatWriter().encode(
+                new String(data.getBytes(charset), charset),
+                BarcodeFormat.QR_CODE, width, height);
+
+        MatrixToImageWriter.writeToFile(
+                matrix,
+                path.substring(path.lastIndexOf('.') + 1),
+                new File(path));
+    }
+
+    boolean invalid = false;
+
+    public void QRCode()
+            throws WriterException, IOException,
+            NotFoundException {
+
+        // The data that the QR code will contain
+        StringBuilder sb = new StringBuilder();
+        sb.append(txtID.getText() + " " + txtPass1.getText());
+
+        System.out.println(sb);
+
+        // The path where the image will get saved
+        String path = "C:\\Users\\Jason\\Desktop\\SOF203\\images\\Login\\" + txtID.getText() + ".png";
+
+        // Encoding charset
+        String charset = "UTF-8";
+
+        Map<EncodeHintType, ErrorCorrectionLevel> hashMap
+                = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
+
+        hashMap.put(EncodeHintType.ERROR_CORRECTION,
+                ErrorCorrectionLevel.L);
+
+        // Create the QR code and save
+        // in the specified folder
+        // as a jpg file
+        createQR(String.valueOf(sb), path, charset, hashMap, 300, 300);
+        System.out.println("QR Code Generated!!! ");
+    }
+
     void Reset() {
         txtID.setText("");
         txtPass1.setText("");
@@ -225,8 +285,21 @@ public class Registration extends javax.swing.JFrame {
         txtEmail.setText("");
         lblImg.setIcon(null);
     }
-    
+
     boolean pic = false;
+
+    public static boolean take = false;
+
+    String picker = "";
+
+    void GetPath() {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            picker = String.valueOf(fc.getSelectedFile()) + "\\" + txtID.getText() + ".png";
+        }
+    }
+
     void TakePic() {
         pic = false;
         com.github.sarxos.webcam.Webcam webcam = com.github.sarxos.webcam.Webcam.getDefault();
@@ -247,22 +320,22 @@ public class Registration extends javax.swing.JFrame {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         BufferedImage image = webcam.getImage();
-                        ImageIO.write(image, "PNG", new File("C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\" + txtID.getText() + ".png"));
-                        take = true;
-                        System.out.println(take);
-                        lblImg.setIcon(new ImageIcon(((new ImageIcon("C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\" + txtID.getText() + ".png").getImage()).
+                        GetPath();
+                        IU = picker;
+                        System.out.println(IU + " -- " + picker);
+                        ImageIO.write(image, "PNG", new File(IU));
+                        lblImg.setIcon(new ImageIcon(((new ImageIcon(IU).getImage()).
                                 getScaledInstance(lblImg.getWidth(), lblImg.getHeight(), java.awt.Image.SCALE_SMOOTH))));
+
+//                        IU = picker;
                         frame.dispose();
                         webcam.close();
-                        IU = "C:\\Users\\Jason\\Desktop\\multiple-choice-question\\SOF203\\images\\" + txtID.getText() + ".png";
                     } catch (Exception err) {
 
                     }
 
                 }
             });
-
-            pic = true;
 
             panel.add(btn1);
 
@@ -456,6 +529,8 @@ public class Registration extends javax.swing.JFrame {
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
         // TODO add your handling code here:
         SignUp();
+
+
     }//GEN-LAST:event_btnSignUpActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed

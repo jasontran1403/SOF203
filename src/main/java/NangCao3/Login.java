@@ -63,13 +63,14 @@ public class Login extends javax.swing.JFrame {
     }
 
     boolean invalid = false;
+
     public void QRCode()
             throws WriterException, IOException,
             NotFoundException {
 
         // The data that the QR code will contain
         StringBuilder sb = new StringBuilder();
-        
+
         for (int i = 0; i <= ua.size() - 1; i++) {
             if (ua.get(i).getUsername().equals(txtUsername.getText())) {
                 sb.append(ua.get(i).getUsername() + " " + ua.get(i).getPassword());
@@ -142,8 +143,7 @@ public class Login extends javax.swing.JFrame {
 
     public Object Open(String path) throws Exception {
         try (
-                FileInputStream fin = new FileInputStream(path);
-                ObjectInputStream ois = new ObjectInputStream(fin);) {
+                 FileInputStream fin = new FileInputStream(path);  ObjectInputStream ois = new ObjectInputStream(fin);) {
             Object obj = ois.readObject();
             return obj;
         }
@@ -312,30 +312,30 @@ public class Login extends javax.swing.JFrame {
 
         if (invalid == true) {
             try {
-            ReadQR();
-        } catch (Exception e) {
+                ReadQR();
+            } catch (Exception e) {
 
-        }
-        System.out.println(output);
-
-        System.out.println(output.length());
-        char kyTu;
-        int space = 0;
-        for (int i = 0;
-                i < output.length();
-                i++) {
-            kyTu = output.charAt(i);
-            if (Character.isSpace(kyTu)) {
-                space = i;
             }
+            System.out.println(output);
+
+            System.out.println(output.length());
+            char kyTu;
+            int space = 0;
+            for (int i = 0;
+                    i < output.length();
+                    i++) {
+                kyTu = output.charAt(i);
+                if (Character.isSpace(kyTu)) {
+                    space = i;
+                }
+            }
+
+            System.out.println(space);
+
+            txtUsername.setText(output.substring(0, space));
+            txtPassword.setText(output.substring(space + 1, output.length()));
         }
 
-        System.out.println(space);
-
-        txtUsername.setText(output.substring(0, space));
-        txtPassword.setText(output.substring(space + 1, output.length()));
-        }
-        
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
