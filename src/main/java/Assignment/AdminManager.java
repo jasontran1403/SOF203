@@ -532,6 +532,7 @@ public class AdminManager extends javax.swing.JFrame {
         lblImg.setVerifyInputWhenFocusTarget(false);
         jPanel1.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 150, 150));
 
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\new.png")); // NOI18N
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
@@ -539,6 +540,7 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 70, 40));
 
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\add.png")); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -546,6 +548,7 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 70, 40));
 
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\delete.png")); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -553,6 +556,7 @@ public class AdminManager extends javax.swing.JFrame {
         });
         jPanel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 300, 70, 40));
 
+        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\edit.png")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -590,15 +594,16 @@ public class AdminManager extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 0, -1, -1));
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 0, -1, -1));
 
-        btnTakePic.setText("Take Picture");
+        btnTakePic.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\10937d267fa08dfed4b1.jpg")); // NOI18N
+        btnTakePic.setText("Camera");
         btnTakePic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTakePicActionPerformed(evt);
             }
         });
-        jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 260, -1, -1));
+        jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 260, -1, -1));
 
         Background.setIcon(new javax.swing.ImageIcon("/Users/jason/Desktop/SOF203/src/main/java/Assignment/bg2.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(-2, 0, 820, 700));

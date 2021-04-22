@@ -473,6 +473,7 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 210, 30));
 
+        btnUpload.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\up.png")); // NOI18N
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadActionPerformed(evt);
@@ -480,6 +481,7 @@ public class Registration extends javax.swing.JFrame {
         });
         jPanel1.add(btnUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 280, 70, -1));
 
+        btnRemove.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\remove.png")); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -492,13 +494,14 @@ public class Registration extends javax.swing.JFrame {
         lblImg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 140, 170));
 
-        btnTakePic.setText("Take Pic");
+        btnTakePic.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\10937d267fa08dfed4b1.jpg")); // NOI18N
+        btnTakePic.setText("Camera");
         btnTakePic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTakePicActionPerformed(evt);
             }
         });
-        jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 320, 100, 40));
+        jPanel1.add(btnTakePic, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 320, 120, 40));
 
         Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\registration.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 609, 569));

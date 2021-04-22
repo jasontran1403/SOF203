@@ -118,7 +118,6 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
     JFrame wc = new JFrame();
 
     public void QR_Reader() {
-
         setTitle("Reading QR Code");
         Dimension size = WebcamResolution.VGA.getSize();
         webcam = Webcam.getWebcams().get(0);
@@ -137,7 +136,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
 
         do {
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -179,8 +178,10 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
 
                 txtUser.setText(time_then.substring(0, space));
                 txtPass.setText(time_then.substring(space + 1, time_then.length()));
+                Login();
                 webcam.close();
                 wc.dispose();
+                break;
             }
 
         } while (true);
@@ -316,6 +317,8 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
             }
         });
         jPanel1.add(btnForgot, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 320, 180, 40));
+
+        Background.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jason\\Desktop\\SOF203\\src\\main\\java\\Assignment\\login.png")); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -344,7 +347,7 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Login();
-      
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -355,57 +358,49 @@ public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         QR_Reader();
-        if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
-            Login();
-        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnForgotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForgotActionPerformed
         // TODO add your handling code here:
         String to = JOptionPane.showInputDialog("Enter your email to recover password!");
-        String num = JOptionPane.showInputDialog("Enter your phone number to confirm this is your account!");
         String pw = "";
-        boolean rec = false;
         for (Account account : list) {
-            if (to.equals(account.getEmail()) && num.equals(account.getPhonenum())) {
+            if (to.equals(account.getEmail())) {
                 pw = account.getPassword();
-                rec = true;
+                break;
             } else {
-                rec = false;
-                JOptionPane.showMessageDialog(this, "Email or phone number doesnt match any account!");
+                JOptionPane.showMessageDialog(this, "Email doesnt match any account!");
             }
         }
 
-        if (rec) {
-            try {
+        try {
 
-                System.out.println(pw);
-                Properties p = new Properties();
-                p.put("mail.smtp.auth", "true");
-                p.put("mail.smtp.starttls.enable", "true");
-                p.put("mail.smtp.host", "smtp.gmail.com");
-                p.put("mail.smtp.port", 587);
-                String accountName = "haitnps14692@fpt.edu.vn";
-                String accountPassword = "Hai14031993";
-                Session s = Session.getInstance(p,
-                        new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(accountName, accountPassword);
-                    }
-                });
-                String from = "haitnps14692@fpt.edu.vn";
-                String subject = "Recover password from FPT PolyTechnic!";
-                String body = "<html><b style=" + "color:blue>" + "Your old password is: " + pw + "<html><br>Please change it as soon as posible!";
-                Message msg = new MimeMessage(s);
-                msg.setFrom(new InternetAddress(from));
-                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-                msg.setSubject(subject);
-                msg.setContent(body, "text/html; charset=utf-8");
-                Transport.send(msg);
-                JOptionPane.showMessageDialog(this, "Recover your password is successfully, please check you email!");
-            } catch (MessagingException ex) {
-                Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println(pw);
+            Properties p = new Properties();
+            p.put("mail.smtp.auth", "true");
+            p.put("mail.smtp.starttls.enable", "true");
+            p.put("mail.smtp.host", "smtp.gmail.com");
+            p.put("mail.smtp.port", 587);
+            String accountName = "haitnps14692@fpt.edu.vn";
+            String accountPassword = "Hai14031993";
+            Session s = Session.getInstance(p,
+                    new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(accountName, accountPassword);
+                }
+            });
+            String from = "haitnps14692@fpt.edu.vn";
+            String subject = "Recover password from FPT PolyTechnic!";
+            String body = "<html><b style=" + "color:blue>" + "Your old password is: " + pw + "<html><br>Please change it as soon as posible!";
+            Message msg = new MimeMessage(s);
+            msg.setFrom(new InternetAddress(from));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            msg.setSubject(subject);
+            msg.setContent(body, "text/html; charset=utf-8");
+            Transport.send(msg);
+            JOptionPane.showMessageDialog(this, "Recover your password is successfully, please check you email!");
+        } catch (MessagingException ex) {
+            Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_btnForgotActionPerformed
