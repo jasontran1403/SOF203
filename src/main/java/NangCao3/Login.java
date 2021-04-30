@@ -5,9 +5,14 @@
  */
 package NangCao3;
 
+import static Assignment.Login.time_then;
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.NotFoundException;
@@ -18,6 +23,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,15 +34,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author jason
  */
-public class Login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame implements Runnable, ThreadFactory {
 
+        private static final long serialVersionUID = 6441489157408381878L;
+
+    private Executor executor = Executors.newSingleThreadExecutor(this);
+        private Webcam webcam = null;
+    private WebcamPanel panel = null;
     /**
      * Creates new form Login
      */
@@ -154,6 +170,32 @@ public class Login extends javax.swing.JFrame {
         ua = (List<UserAccount>) Open("account.txt");
 
     }
+    
+    public void Login() {
+        System.out.println(ua.size());
+        boolean check = true;
+        for (int i = 0; i <= ua.size() - 1; i++) {
+            if (ua.get(i).getUsername().equalsIgnoreCase(txtUsername.getText()) && ua.get(i).getPassword().equals(txtPassword.getText())) {
+                check = true;
+                break;
+            } else {
+                check = false;
+            }
+        }
+
+        if (check) {
+            JOptionPane.showMessageDialog(this, "Login successfully!");
+            Login login = new Login();
+            login.setVisible(false);
+            dispose();
+            StudentManage sm = new StudentManage();
+            sm.setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Username or password is incorrect!");
+            txtUsername.requestFocus();
+        }
+    }
 
     public void Run() {
         try {
@@ -169,6 +211,85 @@ public class Login extends javax.swing.JFrame {
         dispose();
         Signup signup = new Signup();
         signup.setVisible(true);
+    }
+    
+    JFrame wc = new JFrame();
+
+    public void QRReader() {
+        setTitle("Reading QR Code");
+        Dimension size = WebcamResolution.VGA.getSize();
+        webcam = Webcam.getWebcams().get(0);
+        webcam.setViewSize(size);
+        panel = new WebcamPanel(webcam);
+        panel.setPreferredSize(size);
+        wc.add(panel);
+        wc.pack();
+        wc.setVisible(true);
+        wc.setResizable(false);
+        executor.execute(this);
+    }
+
+    @Override
+    public void run() {
+
+        do {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            com.google.zxing.Result result = null;
+            BufferedImage image = null;
+
+            if (webcam.isOpen()) {
+
+                if ((image = webcam.getImage()) == null) {
+                    continue;
+                }
+
+                LuminanceSource source = new BufferedImageLuminanceSource(image);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+                try {
+                    result = new MultiFormatReader().decode(bitmap);
+                } catch (NotFoundException e) {
+                    // fall thru, it means there is no QR code in image
+                }
+            }
+
+            if (result != null) {
+                time_then = result.getText();
+                System.out.println(time_then);//this is the text extracted from QR CODE
+                char kyTu;
+                int space = 0;
+                for (int i = 0;
+                        i < time_then.length();
+                        i++) {
+                    kyTu = time_then.charAt(i);
+                    if (Character.isSpace(kyTu)) {
+                        space = i;
+                    }
+                }
+
+                System.out.println(space);
+
+                txtUsername.setText(time_then.substring(0, space));
+                txtPassword.setText(time_then.substring(space + 1, time_then.length()));
+                Login();
+                webcam.close();
+                wc.dispose();
+                break;
+            }
+
+        } while (true);
+    }
+
+    @Override
+    public Thread newThread(Runnable r) {
+        Thread t = new Thread(r, "example-runner");
+        t.setDaemon(true);
+        return t;
     }
 
     /**
@@ -299,42 +420,45 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        if (txtUsername.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Please enter your username to generate QR Code!!");
-            txtUsername.requestFocus();
-            return;
-        }
-
-        try {
-            QRCode();
-        } catch (Exception e) {
-        }
-
-        if (invalid == true) {
-            try {
-                ReadQR();
-            } catch (Exception e) {
-
-            }
-            System.out.println(output);
-
-            System.out.println(output.length());
-            char kyTu;
-            int space = 0;
-            for (int i = 0;
-                    i < output.length();
-                    i++) {
-                kyTu = output.charAt(i);
-                if (Character.isSpace(kyTu)) {
-                    space = i;
-                }
-            }
-
-            System.out.println(space);
-
-            txtUsername.setText(output.substring(0, space));
-            txtPassword.setText(output.substring(space + 1, output.length()));
-        }
+//        if (txtUsername.getText().equals("")) {
+//            JOptionPane.showMessageDialog(this, "Please enter your username to generate QR Code!!");
+//            txtUsername.requestFocus();
+//            return;
+//        }
+//
+//        try {
+//            QRCode();
+//        } catch (Exception e) {
+//        }
+//
+//        if (invalid == true) {
+//            try {
+//                ReadQR();              
+//            } catch (Exception e) {
+//
+//            }
+//            System.out.println(output);
+//
+//            System.out.println(output.length());
+//            char kyTu;
+//            int space = 0;
+//            for (int i = 0;
+//                    i < output.length();
+//                    i++) {
+//                kyTu = output.charAt(i);
+//                if (Character.isSpace(kyTu)) {
+//                    space = i;
+//                }
+//            }
+//
+//            System.out.println(space);
+//
+//            txtUsername.setText(output.substring(0, space));
+//            txtPassword.setText(output.substring(space + 1, output.length()));
+//        }
+        QRReader();
+        
+        
 
 
     }//GEN-LAST:event_jButton3ActionPerformed
